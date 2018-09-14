@@ -8,20 +8,20 @@ public class AppStart {
 
     public static void main(String[] args) {
 
-//        System.out.println("---------------------------------OLX is Begin---------------------------------");
-//
-//        CrawlerOLX crawlerOLX = new CrawlerOLX(query, City.kiev);
-//        crawlerOLX.ParsePage();
-//
-//        System.out.println("---------------------------------OLX was Finished---------------------------------");
+        System.out.println("---------------------------------OLX is Begin Parse---------------------------------");
 
 
-        System.out.println("---------------------------------Premier is Begin---------------------------------");
+        CrawlerOLX crawlerOLX = new CrawlerOLX(query, City.kiev);
+        crawlerOLX.ParsePage();
+
+        System.out.println("---------------------------------OLX was Finished---------------------------------");
+
+
+        System.out.println("---------------------------------Premier is Begin Parse---------------------------------");
 
         CrawlerPremier crawlerPremier = new CrawlerPremier(query);
         crawlerPremier.ParsePage();
 
         System.out.println("---------------------------------Premier was Finished---------------------------------");
-
     }
 }
