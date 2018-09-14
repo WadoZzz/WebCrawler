@@ -10,7 +10,6 @@ public class AppStart {
 
         System.out.println("---------------------------------OLX is Begin Parse---------------------------------");
 
-
         CrawlerOLX crawlerOLX = new CrawlerOLX(query, City.kiev);
         crawlerOLX.ParsePage();
 

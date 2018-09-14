@@ -60,7 +60,6 @@ public class CrawlerPremier implements ICrawler {
         }
     }
 
-
     public int getLastListPageination() {
         Document doc = null;
         try {
@@ -69,10 +68,7 @@ public class CrawlerPremier implements ICrawler {
             e.printStackTrace();
         }
         Elements el = doc.select(".pagins");
-
-        int lastPage = Integer.parseInt(el.select("a[href]").last().text());
-
-        return lastPage;
+        return Integer.parseInt(el.select("a[href]").last().text());
     }
 
     @Override
