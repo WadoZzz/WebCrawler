@@ -3,10 +3,10 @@ package service;
 import java.util.Set;
 
 public interface ICrawler {
+
 	/**
 	 * Find elements on current the page
-	 * 
-	 * @return
+	 *
 	 */
 	Set<?> parsePage(String query);
 

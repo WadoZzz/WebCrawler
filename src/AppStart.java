@@ -1,24 +1,16 @@
+import city.City;
 import service.CrawlerOlx;
 import service.CrawlerPremier;
 
 public class AppStart {
 
-
     public static void main(String[] args) {
-        String query = "продам";
-
-        System.out.println("---------------------------------OLX is Begin Parse---------------------------------");
+        String query = "Тест";
 
         CrawlerOlx crawlerOlx = new CrawlerOlx();
-        crawlerOlx.parsePage(query);
-
-        System.out.println("---------------------------------OLX was Finished---------------------------------");
-
-        System.out.println("---------------------------------Premier is Begin Parse---------------------------------");
+        crawlerOlx.parsePage(query, City.KHMELNITSKIY);
 
         CrawlerPremier crawlerPremier = new CrawlerPremier();
         crawlerPremier.parsePage(query);
-
-        System.out.println("---------------------------------Premier was Finished---------------------------------");
     }
 }

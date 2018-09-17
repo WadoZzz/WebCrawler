@@ -13,7 +13,6 @@ import entity.Ads;
 
 public class CrawlerPremier implements ICrawler {
 
-	private static String page = "&page=";
 	private static String URL_PATH = "https://premier.ua/";
 	private static int countAds = 0;
 
@@ -21,22 +20,17 @@ public class CrawlerPremier implements ICrawler {
 		return URL_PATH;
 	}
 
-
-
-	try{
-		doc = Js
-	}
-
 	@Override
 	public Set<Ads> parsePage(String query) {
 		Set<Ads> adsPremierList = new LinkedHashSet<>();
-		if (!adsIsFail(query)) {
+		if (adsIsFail(query)) {
+			System.out.println("---------------------------------Premier is Begin Parse---------------------------------");
 			System.out.println("All page: " + getLastListPagination(query));
 
 			for (int i = 1; i <= getLastListPagination(query); i++) {
 				Document document = null;
 				try {
-					document = Jsoup.connect(URL_PATH + "?q=" + query + page + i).get();
+					document = Jsoup.connect(URL_PATH + "?q=" + query + "&page=" + i).get();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -66,6 +60,7 @@ public class CrawlerPremier implements ICrawler {
 				System.out.println("Total ADS: " + countAds);
 			}
 		}
+		System.out.println("---------------------------------Premier was Finished---------------------------------");
 		return adsPremierList;
 	}
 
@@ -92,9 +87,9 @@ public class CrawlerPremier implements ICrawler {
 		assert document != null;
 		Elements elements = document.select(".adv-item-content");
 		if (elements.hasClass(".pagins")) {
-			System.out.println("No such messages, pls check query");
 			return true;
 		}
+		System.out.println("No such messages, pls check query");
 		return false;
 	}
 }

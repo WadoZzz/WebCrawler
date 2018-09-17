@@ -13,42 +13,47 @@ import java.util.Set;
 
 public class CrawlerOlx implements ICrawler {
 
-	private City city = City.LIST;
-	private String page = "/?page=";
-	private static String URL_PATH = "https://www.olx.ua/";
-	private int countAds = 0;
-	private static Document doc = null;
+    private City city = City.LIST;
+    private static String URL_PATH = "https://www.olx.ua/";
+    private int countAds = 0;
 
-	try
-	{
-		doc = Jsoup.connect(URL_PATH).timeout(10000).get();
-	}catch(
-	IOException ex)
-	{
-		ex.getMessage();
-	}
+    private City getCity() {
+        return city;
+    }
 
-	/**
+    private void setCity(City city) {
+        this.city = city;
+    }
+
+    /**
+     * search by city
+     */
+    public Set<Ads> parsePage(String query, City city) {
+        setCity(city);
+        return parsePage(query);
+    }
+
+    /**
      * Find elements on current the page
      */
     @Override
     public Set<Ads> parsePage(String query) {
         Set<Ads> adsOLXList = new LinkedHashSet<>();
 
-        if (!adsIsFail(query)) {
+        if (adsIsFail(query)) {
+            System.out.println("---------------------------------OLX is Begin Parse---------------------------------");
             System.out.println("All page: " + getLastListPagination(query));
 
             for (int i = 1; i <= getLastListPagination(query); i++) {
                 Document doc = null;
                 try {
-                    doc = Jsoup.connect(URL_PATH + city + "/q-" + query + page + i).timeout(10000).get();
+                    doc = Jsoup.connect(URL_PATH + city + "/q-" + query + "/?page=" + i).timeout(10000).get();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
                 assert doc != null;
                 Elements elements = doc.getElementsByAttributeValue("class", "wrap");
-
 
                 elements.forEach(element -> {
                     Element element1 = element.child(0);
@@ -71,10 +76,11 @@ public class CrawlerOlx implements ICrawler {
                 System.out.println("Total ADS: " + countAds);
             }
         }
+        System.out.println("---------------------------------OLX was Finished---------------------------------");
         return adsOLXList;
     }
 
-	/**
+    /**
      * @return count pagination on page
      */
     @Override
@@ -94,7 +100,7 @@ public class CrawlerOlx implements ICrawler {
         }
     }
 
-	/**
+    /**
      * @return was the right request
      */
     @Override
@@ -107,10 +113,10 @@ public class CrawlerOlx implements ICrawler {
         }
         assert document != null;
         Elements el = document.getElementsByAttributeValue("class", "c41 lheight24");
-        if (el.hasClass("lheight24")) {
-            System.out.println("No such messages, pls check query");
+        if (!el.hasClass("lheight24")) {
             return true;
         }
+        System.out.println("No such messages, pls check query");
         return false;
     }
 }
