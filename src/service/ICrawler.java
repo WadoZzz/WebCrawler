@@ -3,7 +3,6 @@ package service;
 import java.util.Set;
 
 public interface ICrawler {
-
 	/**
 	 * Find elements on current the page
 	 * 
@@ -22,4 +21,5 @@ public interface ICrawler {
 	 * checks if there was a correct request
 	 */
 	boolean adsIsFail(String query);
+
 }
