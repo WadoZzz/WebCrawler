@@ -13,12 +13,22 @@ import java.util.Set;
 
 public class CrawlerOlx implements ICrawler {
 
-    private City city = City.LIST;
-    private String page = "/?page=";
-    private String URL_PATH = "https://www.olx.ua/";
-    private int countAds = 0;
+	private City city = City.LIST;
+	private String page = "/?page=";
+	private static String URL_PATH = "https://www.olx.ua/";
+	private int countAds = 0;
+	private static Document doc = null;
 
-    /**
+	try
+	{
+		doc = Jsoup.connect(URL_PATH).timeout(10000).get();
+	}catch(
+	IOException ex)
+	{
+		ex.getMessage();
+	}
+
+	/**
      * Find elements on current the page
      */
     @Override
@@ -64,7 +74,7 @@ public class CrawlerOlx implements ICrawler {
         return adsOLXList;
     }
 
-    /**
+	/**
      * @return count pagination on page
      */
     @Override
@@ -84,7 +94,7 @@ public class CrawlerOlx implements ICrawler {
         }
     }
 
-    /**
+	/**
      * @return was the right request
      */
     @Override
