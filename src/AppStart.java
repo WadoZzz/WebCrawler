@@ -1,25 +1,23 @@
-import city.City;
-import controller.CrawlerOLX;
-import controller.CrawlerPremier;
+import service.CrawlerOlx;
+import service.CrawlerPremier;
 
 public class AppStart {
 
-    private static String query = "продам";
 
     public static void main(String[] args) {
+        String query = "продам";
 
         System.out.println("---------------------------------OLX is Begin Parse---------------------------------");
 
-        CrawlerOLX crawlerOLX = new CrawlerOLX(query, City.kiev);
-        crawlerOLX.ParsePage();
+        CrawlerOlx crawlerOlx = new CrawlerOlx();
+        crawlerOlx.parsePage(query);
 
         System.out.println("---------------------------------OLX was Finished---------------------------------");
 
-
         System.out.println("---------------------------------Premier is Begin Parse---------------------------------");
 
-        CrawlerPremier crawlerPremier = new CrawlerPremier(query);
-        crawlerPremier.ParsePage();
+        CrawlerPremier crawlerPremier = new CrawlerPremier();
+        crawlerPremier.parsePage(query);
 
         System.out.println("---------------------------------Premier was Finished---------------------------------");
     }
