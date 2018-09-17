@@ -1,20 +1,22 @@
 package city;
-
 /**
  * City work only for OLX
+ * query LIST - search all over Ukraine
  */
 public enum City {
 
-    /**
-     * Search all over Ukraine
-     */
-    list,
-    /**
-     * Search in Kiev
-     */
-    kiev,
-    /**
-     * Search in Khmelnitskiy
-     */
-    khmelnitskiy
+    LIST("list"),
+    KIEV("kiev"),
+    KHMELNITSKIY("khmelnitskiy"),
+    LVOV("lvov");
+
+    private final String name;
+
+    City(String s) {
+        name = s;
+    }
+
+    public String toString() {
+        return this.name;
+    }
 }
