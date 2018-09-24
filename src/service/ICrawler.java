@@ -1,18 +1,25 @@
 package service;
 
+import java.util.Set;
+
 public interface ICrawler {
-    /**
-     * Find elements on current the page
-     */
-    void ParsePage();
-    /**
-     *
-     * get count pagination on page, and @return last cont page
-      */
-    int getLastListPageination();
-    /**
-     *
-     * checks if there was a correct request
-     */
-    boolean ADSisFail();
+
+	/**
+	 * Find elements on current the page
+	 *
+	 */
+	Set<?> parsePage(String query);
+
+	/**
+	 *
+	 * get count pagination on page, and @return last cont page
+	 */
+	int getLastListPagination(String query);
+
+	/**
+	 *
+	 * checks if there was a correct request
+	 */
+	boolean adsIsFail(String query);
+
 }

@@ -1,14 +1,14 @@
 package entity;
 
-import controller.CrawlerPremier;
+import static service.CrawlerPremier.getUrlPath;
 
-public class AdsPremier {
+public class Ads {
     private String title;
     private String link;
     private String price;
     private String date;
 
-    public AdsPremier(String title, String link, String price, String date) {
+    public Ads(String title, String link, String price, String date) {
         this.title = title;
         this.link = link;
         this.price = price;
@@ -47,12 +47,13 @@ public class AdsPremier {
         this.date = date;
     }
 
-    @Override
-    public String toString() {
-        return
-                "- title = " + title + "\n" +
-                        "- link = " + CrawlerPremier.getUrlPath() + link + "\n" +
-                        "- date = " + date + "\n" +
-                        "- price = " + price + "\n";
+    public String toStringOLX() {
+        return "- title = " + title + "\n" + "- link = " + link + "\n" + "- date = " + date + "\n" + "- price = "
+                + price + "\n";
+    }
+
+    public String toStringPremier() {
+        return "- title = " + title + "\n" + "- link = " + getUrlPath() + link + "\n" + "- date = "
+                + date + "\n" + "- price = " + price + "\n";
     }
 }

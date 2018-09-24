@@ -1,56 +1,58 @@
-package controller;
+package service;
 
-import entity.AdsOLX;
 import city.City;
+import entity.Ads;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import service.ICrawler;
 
 import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class CrawlerOLX implements ICrawler {
+public class CrawlerOlx implements ICrawler {
 
-    private City city; //city ​​selection
-    private String query; //search query
-    private String page = "?page=";
-    private String URL_PATH;
+    private City city = City.LIST;
+    private static String URL_PATH = "https://www.olx.ua/";
     private int countAds = 0;
 
-    public CrawlerOLX(String query, City city) {
-        this.city = city;
-        this.query = query;
-        URL_PATH = "https://www.olx.ua/" + this.city + "/q-" + this.query + "/";
+    private City getCity() {
+        return city;
     }
 
-    public CrawlerOLX(String query) {
-        this.query = query;
-        URL_PATH = "https://www.olx.ua/" + City.list + "/q-" + this.query + "/";
+    private void setCity(City city) {
+        this.city = city;
+    }
+
+    /**
+     * search by city
+     */
+    public Set<Ads> parsePage(String query, City city) {
+        setCity(city);
+        return parsePage(query);
     }
 
     /**
      * Find elements on current the page
      */
-
-
     @Override
-    public void ParsePage() {
-        Set<AdsOLX> adsList = new LinkedHashSet<>();
+    public Set<Ads> parsePage(String query) {
+        Set<Ads> adsOLXList = new LinkedHashSet<>();
 
-        if (!ADSisFail()) {
-            System.out.println("All page: " + getLastListPageination());
+        if (adsIsFail(query)) {
+            System.out.println("---------------------------------OLX is Begin Parse---------------------------------");
+            System.out.println("All page: " + getLastListPagination(query));
 
-            for (int i = 1; i <= getLastListPageination(); i++) {
+            for (int i = 1; i <= getLastListPagination(query); i++) {
                 Document doc = null;
                 try {
-                    doc = Jsoup.connect(URL_PATH + page + i).timeout(10000).get();
+                    doc = Jsoup.connect(URL_PATH + city + "/q-" + query + "/?page=" + i).timeout(10000).get();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
+                assert doc != null;
                 Elements elements = doc.getElementsByAttributeValue("class", "wrap");
 
                 elements.forEach(element -> {
@@ -60,30 +62,36 @@ public class CrawlerOLX implements ICrawler {
                     String price = element1.select("p.price").text();
                     String date = element.select(".bottom-cell").text();
 
-                    adsList.add(new AdsOLX(title, link, price, date));
+                    adsOLXList.add(new Ads(title, link, price, date));
                     countAds++;
                 });
                 System.out.println(doc.baseUri());
-                adsList.forEach(System.out::println);
 
-                System.out.println("All page: " + "-> " + getLastListPageination());
+                for (Ads ads : adsOLXList) {
+                    System.out.println(ads.toStringOLX());
+                }
+
+                System.out.println("All page: " + "-> " + getLastListPagination(query));
                 System.out.println("Current page: " + "-> " + i);
                 System.out.println("Total ADS: " + countAds);
             }
         }
+        System.out.println("---------------------------------OLX was Finished---------------------------------");
+        return adsOLXList;
     }
 
     /**
      * @return count pagination on page
      */
     @Override
-    public int getLastListPageination() {
+    public int getLastListPagination(String query) {
         Document doc = null;
         try {
-            doc = Jsoup.connect(URL_PATH).timeout(10000).get();
+            doc = Jsoup.connect(URL_PATH + city + "/q-" + query).timeout(10000).get();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        assert doc != null;
         Elements el = doc.getElementsByAttributeValue("class", "item fleft");
         if (el.hasClass("item fleft")) {
             return Integer.parseInt(el.select("span").last().text());
@@ -96,19 +104,19 @@ public class CrawlerOLX implements ICrawler {
      * @return was the right request
      */
     @Override
-    public boolean ADSisFail() {
+    public boolean adsIsFail(String query) {
         Document document = null;
         try {
-            document = Jsoup.connect(URL_PATH).timeout(10000).get();
+            document = Jsoup.connect(URL_PATH + city.toString().toLowerCase() + "/q-" + query).timeout(10000).get();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        assert document != null;
         Elements el = document.getElementsByAttributeValue("class", "c41 lheight24");
-        if (el.hasClass("lheight24")) {
-            System.out.println("No such messages, pls check query");
+        if (!el.hasClass("lheight24")) {
             return true;
-        } else {
-            return false;
         }
+        System.out.println("No such messages, pls check query");
+        return false;
     }
 }
